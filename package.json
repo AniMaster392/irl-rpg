@@ -1,0 +1,17 @@
+{
+  "name": "irl-rpg",
+  "version": "1.0.0",
+  "description": "SSC study RPG app",
+  "main": "main.js",
+  "scripts": {
+    "start": "node server.js",
+    "app": "electron ."
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "electron": "^37.0.0",
+    "electron-builder": "^26.15.3"
+  }
+}

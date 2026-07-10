@@ -1,0 +1,10 @@
+{
+  "level": 1,
+  "xp": 0,
+  "quests": [
+    { "id": 1, "title": "Study Maths for 30 minutes", "xp": 30 },
+    { "id": 2, "title": "Practice Reasoning 25 questions", "xp": 25 },
+    { "id": 3, "title": "Learn 20 English words", "xp": 20 },
+    { "id": 4, "title": "Revise General Awareness", "xp": 25 }
+  ]
+}

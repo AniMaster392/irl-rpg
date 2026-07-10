@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IRL RPG</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <p class="tag">SSC Study App</p>
+      <h1>IRL RPG</h1>
+      <p>Complete study quests, earn XP, and level up your real life.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Your Character</h2>
+
+      <div class="stats">
+        <div>
+          <span>Level</span>
+          <strong id="level">1</strong>
+        </div>
+
+        <div>
+          <span>XP</span>
+          <strong id="xp">0 / 100</strong>
+        </div>
+      </div>
+
+      <div class="bar">
+        <div id="xpBar"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Today’s Quests</h2>
+      <div id="quests"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Study Timer</h2>
+      <div id="timer">25:00</div>
+      <button onclick="startTimer()">Start</button>
+      <button onclick="resetTimer()" class="secondary">Reset</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
