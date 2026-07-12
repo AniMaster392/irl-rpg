@@ -7,46 +7,400 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="app">
-    <section class="hero">
-      <p class="tag">SSC Study App</p>
-      <h1>IRL RPG</h1>
-      <p>Complete study quests, earn XP, and level up your real life.</p>
-    </section>
-
-    <section class="panel">
-      <h2>Your Character</h2>
-
-      <div class="stats">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <span class="brand-mark">IRL</span>
         <div>
-          <span>Level</span>
-          <strong id="level">1</strong>
-        </div>
-
-        <div>
-          <span>XP</span>
-          <strong id="xp">0 / 100</strong>
+          <strong>IRL RPG</strong>
+          <small>SSC Study OS</small>
         </div>
       </div>
 
-      <div class="bar">
-        <div id="xpBar"></div>
+      <nav class="app-nav" aria-label="App menu">
+        <button class="nav-button active" data-target="dashboard">Dashboard</button>
+        <button class="nav-button" data-target="study-library">Study Library</button>
+        <button class="nav-button" data-target="ai-explainer">AI Explainer</button>
+        <button class="nav-button" data-target="exam-events">News Hub</button>
+        <button class="nav-button" data-target="mock-tests">Mock Tests</button>
+        <button class="nav-button" data-target="progress">Quest Board</button>
+        <button class="nav-button" data-target="settings">Settings</button>
+      </nav>
+      <div class="sidebar-card">
+        <span id="sidebarFocusLabel">Today Focus</span>
+        <strong id="sidebarFocusText">2 Pomodoro + 1 Mock</strong>
       </div>
-    </section>
+    </aside>
 
-    <section class="panel">
-      <h2>Today’s Quests</h2>
-      <div id="quests"></div>
-    </section>
+    <main class="app">
+      <section class="app-view active-view dashboard-view" id="dashboard">
+        <div class="dashboard-command-shell">
+          <div class="dashboard-topbar-lite">
+            <label class="dash-search">
+              <span>Search</span>
+              <input type="search" placeholder="Find topic, mock, news, quest" />
+            </label>
+            <div class="dash-mini-actions" aria-label="Dashboard quick status">
+              <span>AI</span>
+              <span>Mock</span>
+              <span>News</span>
+              <b>Ready</b>
+            </div>
+          </div>
 
-    <section class="panel">
-      <h2>Study Timer</h2>
-      <div id="timer">25:00</div>
-      <button onclick="startTimer()">Start</button>
-      <button onclick="resetTimer()" class="secondary">Reset</button>
-    </section>
-  </main>
+          <div class="dashboard-course-hero">
+            <div>
+              <p class="tag">SSC Study OS</p>
+              <h1>IRL RPG</h1>
+              <p id="profileHeroLine">Command center for study streak, XP, weak zones, and next actions.</p>
+              <button data-open="study-library">Explore More</button>
+            </div>
+            <div class="dash-hero-stats">
+              <section><span>Level</span><strong id="dashLevel">1</strong></section>
+              <section><span>XP</span><strong id="dashXp">0 / 100</strong></section>
+              <section><span>Status</span><strong>Ready</strong></section>
+            </div>
+          </div>
 
+          <div class="dash-course-row">
+            <button class="dash-course-card card-blue" data-open="study-library">
+              <span>01</span>
+              <strong>Study Library</strong>
+              <small>Maths, Reasoning, English, GA</small>
+              <b>Start now</b>
+            </button>
+            <button class="dash-course-card card-cyan" data-open="ai-explainer">
+              <span>02</span>
+              <strong>AI Explainer</strong>
+              <small>Ask doubts with voice</small>
+              <b>Ask now</b>
+            </button>
+            <button class="dash-course-card card-dark" data-open="mock-tests">
+              <span>03</span>
+              <strong>Mock Tests</strong>
+              <small>20Q / 10 min exam mode</small>
+              <b>Practice</b>
+            </button>
+            <button class="dash-course-card card-red" data-open="progress">
+              <span>04</span>
+              <strong>Quest Board</strong>
+              <small>Daily missions and rewards</small>
+              <b>Open board</b>
+            </button>
+          </div>
+
+          <div class="dash-main-layout">
+            <section class="panel dash-progress-panel">
+              <div class="section-head compact-head">
+                <div>
+                  <h2>Course Progress</h2>
+                  <p class="muted">Your week rhythm and study climb.</p>
+                </div>
+                <span class="ai-badge">Last Month</span>
+              </div>
+              <div class="dash-curve-chart" aria-label="Course progress graph">
+                <svg viewBox="0 0 640 260" role="img" aria-label="Progress line from January to December">
+                  <path class="dash-chart-grid" d="M40 210H600M40 160H600M40 110H600M40 60H600" />
+                  <path class="dash-chart-line" d="M45 205 C95 165, 135 185, 180 150 S270 120, 320 92 S435 105, 488 58 S565 52, 600 30" />
+                  <circle cx="320" cy="92" r="9" />
+                  <circle cx="600" cy="30" r="9" />
+                </svg>
+                <div class="dash-chart-bubble">5 lessons</div>
+                <div class="dash-months"><span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span></div>
+              </div>
+            </section>
+
+            <aside class="dash-action-panel">
+              <button data-open="study-library"><span>Book</span><strong>Best Seller</strong></button>
+              <button data-open="mock-tests"><span>Test</span><strong>Practice</strong></button>
+              <button data-open="ai-explainer"><span>Star</span><strong>Favorites</strong></button>
+              <button data-open="exam-events"><span>News</span><strong>Updates</strong></button>
+              <button data-open="progress"><span>Quest</span><strong>Support</strong></button>
+              <button data-open="settings"><span>User</span><strong>Profile</strong></button>
+            </aside>
+          </div>
+
+          <div class="dash-bottom-layout">
+            <section class="panel dashboard-grid dash-character-card">
+              <div>
+                <h2>Your Character</h2>
+                <div class="stats">
+                  <div><span>Level</span><strong id="level">1</strong></div>
+                  <div><span>XP</span><strong id="xp">0 / 100</strong></div>
+                </div>
+                <div class="bar"><div id="xpBar"></div></div>
+              </div>
+              <div>
+                <h2>Study Timer</h2>
+                <div id="timer">25:00</div>
+                <button onclick="startTimer()">Start</button>
+                <button onclick="resetTimer()" class="secondary">Reset</button>
+              </div>
+            </section>
+
+            <section class="panel dash-quest-panel">
+              <div class="section-head compact-head">
+                <div>
+                  <h2>Today's Quests</h2>
+                  <p class="muted">Small actions that move your prep forward.</p>
+                </div>
+              </div>
+              <div id="quests"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+      <section class="panel app-view" id="study-library">
+        <h2>Study Library</h2>
+        <p class="muted">Choose a subject and start studying SSC topics step by step.</p>
+        <div class="subject-grid" id="subjects"></div>
+        <div class="lesson-box" id="lessonBox">
+          <h3 id="lessonTitle">Select a subject</h3>
+          <p id="lessonIntro">Your chapters, key points, and practice task will appear here.</p>
+          <div id="chapterList"></div>
+        </div>
+      </section>
+
+      <section class="panel app-view" id="ai-explainer">
+        <div class="section-head">
+          <div>
+            <h2>AI Explainer</h2>
+            <p class="muted">Ask any SSC question and get a simple step-by-step explanation.</p>
+          </div>
+          <span class="ai-badge" id="aiMode">Ready</span>
+        </div>
+
+        <div class="ai-box">
+          <div class="quick-prompts">
+            <button onclick="setAiQuestion('Explain percentage for SSC with one example')">Percentage</button>
+            <button onclick="setAiQuestion('Explain coding-decoding reasoning in simple words')">Reasoning</button>
+            <button onclick="setAiQuestion('Explain tenses for SSC English with examples')">English</button>
+            <button onclick="setAiQuestion('Make a 7 day SSC CGL study plan')">Study plan</button>
+          </div>
+
+          <textarea id="aiQuestion" placeholder="Example: Explain ratio and proportion simply for SSC"></textarea>
+
+          <div class="ai-controls">
+            <select id="aiStyle">
+              <option value="simple">Simple</option>
+              <option value="exam focused">Exam focused</option>
+              <option value="step by step">Step by step</option>
+            </select>
+            <button onclick="startVoiceQuestion()" class="voice-button">Speak Question</button>
+            <select id="voiceSelect" class="voice-select" title="Choose a free Chrome/Google voice"><option>Loading voices...</option></select>
+            <button onclick="askAI()">Explain</button>
+            <button onclick="readAIAnswer()" class="voice-button">Read Answer</button>
+            <button onclick="stopVoice()" class="stop-button">Stop Voice</button>
+          </div>
+
+          <pre id="aiAnswer">Ask a question to start.</pre>
+        </div>
+      </section>
+
+      <section class="panel app-view news-hub-view" id="exam-events">
+        <div class="section-head">
+          <div>
+            <p class="tag">Daily Intel</p>
+            <h2>News Hub</h2>
+            <p class="muted">Track SSC exam updates and current affairs that can become exam questions.</p>
+          </div>
+          <a class="official-link" href="https://ssc.gov.in" target="_blank" rel="noreferrer">Official SSC</a>
+        </div>
+
+        <div class="news-tabs" role="tablist" aria-label="News Hub sections">
+          <button class="news-tab active" data-news-tab="exam-updates">Exam Updates</button>
+          <button class="news-tab" data-news-tab="current-affairs">Current Affairs</button>
+        </div>
+
+        <div class="news-status-row">
+          <span id="newsStatus">Loading latest updates...</span>
+          <button class="secondary" onclick="loadNewsHub(true)">Refresh News</button>
+        </div>
+
+        <div id="newsReader" class="news-reader" hidden></div>
+
+        <div class="news-pane active-news-pane" id="exam-updates">
+          <div class="news-layout">
+            <section class="news-feed-panel">
+              <div class="news-panel-title"><span>Official Exam Watch</span><small>Notification, dates, admit card, result, registration</small></div>
+              <div id="examNewsFeed" class="news-feed-list"></div>
+            </section>
+            <section class="news-feed-panel">
+              <div class="news-panel-title"><span>What To Study Now</span><small>Based on profile and SSC stage</small></div>
+              <div id="examStudyFeed" class="news-feed-list"></div>
+            </section>
+          </div>
+
+          <div class="exam-grid" id="examCards"></div>
+          <div class="exam-detail" id="examDetail">
+            <p class="tag">Exam guide</p>
+            <h3 id="examTitle">Select an exam</h3>
+            <p id="examIntro">Your exam pattern, subject focus, registration route, and preparation route will appear here.</p>
+            <div class="exam-info-grid">
+              <div><span>Level</span><strong id="examLevel">-</strong></div>
+              <div><span>Selection stages</span><strong id="examStages">-</strong></div>
+              <div><span>Best for</span><strong id="examBestFor">-</strong></div>
+            </div>
+            <div class="exam-columns">
+              <div><h4>Syllabus focus</h4><div id="examSyllabus"></div></div>
+              <div><h4>Events to track</h4><div id="examEvents"></div></div>
+            </div>
+            <div class="study-task" id="examPlan">Select an exam to see your preparation plan.</div>
+          </div>
+        </div>
+
+        <div class="news-pane" id="current-affairs">
+          <div class="news-layout current-news-layout">
+            <section class="news-feed-panel wide-news-panel">
+              <div class="news-panel-title"><span>Current Affairs Watch</span><small>Daily exam-focused news</small></div>
+              <div id="currentAffairsFeed" class="news-feed-list"></div>
+            </section>
+            <section class="news-feed-panel">
+              <div class="news-panel-title"><span>SSC Filter</span><small>How to convert news into marks</small></div>
+              <div id="currentAffairsStudyFeed" class="news-feed-list"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel app-view" id="mock-tests">
+        <div class="section-head">
+          <div>
+            <h2>Mock Tests</h2>
+            <p class="muted">Profile-based 20 question mocks with 10 minute timer, mistake review, and cooldown.</p>
+          </div>
+          <span class="ai-badge">20Q / 10 Min</span>
+        </div>
+        <div class="mock-cooldown-box" id="mockCooldownBox"></div>
+        <div class="mock-grid" id="mockTestCards"></div>
+        <div class="mock-stage" id="mockTestStage"></div>
+      </section>
+
+      <section class="panel app-view quest-board-view" id="progress">
+        <div class="section-head">
+          <div>
+            <p class="tag">Guild Counter</p>
+            <h2>Quest Board</h2>
+            <p class="muted" id="questBoardIntro">System checks your profile, lessons, mocks, XP, and cooldown to post useful quests.</p>
+          </div>
+          <span class="ai-badge" id="questBoardRank">Rank E</span>
+        </div>
+
+        <div class="quest-board-hero">
+          <div><span>Adventurer</span><strong id="questAdventurerName">Learner</strong><small id="questTargetPath">Set profile target in Settings.</small></div>
+          <div><span>Level</span><strong id="progressLevel">1</strong><small>Current rank power</small></div>
+          <div><span>XP</span><strong id="progressXp">0 / 100</strong><small>Next level charge</small></div>
+          <div><span>Next Reward</span><strong id="questNextReward">Unlock stronger mock quest</strong><small>Complete quests to grow</small></div>
+        </div>
+
+        <div class="bar progress-wide quest-xp-bar"><div id="progressBar"></div></div>
+
+        <div class="quest-board-layout">
+          <section class="quest-board-panel main-quest-panel">
+            <div class="quest-board-title"><span>Main Quests</span><small>Build the core path</small></div>
+            <div class="quest-scroll" id="mainQuestList"></div>
+          </section>
+          <section class="quest-board-panel daily-quest-panel">
+            <div class="quest-board-title"><span>Daily Quests</span><small>Small wins today</small></div>
+            <div class="quest-scroll" id="dailyQuestList"></div>
+          </section>
+          <section class="quest-board-panel system-quest-panel">
+            <div class="quest-board-title"><span>System Alerts</span><small>What needs attention</small></div>
+            <div class="quest-scroll" id="systemQuestList"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel app-view" id="settings">
+        <div class="section-head">
+          <div>
+            <h2>Settings</h2>
+            <p class="muted">Create your learner profile, choose SSC exam targets, and control the full app theme.</p>
+          </div>
+          <span class="ai-badge" id="profileStatusBadge">No Profile</span>
+        </div>
+
+        <div class="settings-grid">
+          <section class="settings-card">
+            <h3>Profile</h3>
+            <p class="muted">Basic details stay on this device and help IRL RPG prepare the right path.</p>
+            <div class="profile-summary" id="profileSummary">No profile yet. Fill the form and save.</div>
+            <form class="profile-form" id="profileForm">
+              <label>Name<input id="profileName" type="text" placeholder="Your name" /></label>
+              <label>Phone number<input id="profilePhone" type="tel" placeholder="Optional" /></label>
+              <label>Email<input id="profileEmail" type="email" placeholder="Optional" /></label>
+              <label>Status
+                <select id="profileStatus">
+                  <option value="student">Student</option>
+                  <option value="working">Working</option>
+                  <option value="unemployed">Unemployed</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label>Study level
+                <select id="profileLevel">
+                  <option value="beginner">Beginner</option>
+                  <option value="basic">Basic</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </label>
+              <label>Daily study time
+                <select id="profileTime">
+                  <option value="30 minutes">30 minutes</option>
+                  <option value="1 hour">1 hour</option>
+                  <option value="2 hours">2 hours</option>
+                  <option value="3+ hours">3+ hours</option>
+                </select>
+              </label>
+            </form>
+          </section>
+
+          <section class="settings-card">
+            <h3>Exam Targets</h3>
+            <p class="muted">Choose what you are preparing for. The app will use this to suggest study direction.</p>
+            <div class="exam-choice-grid" id="profileExamChoices">
+              <label><input type="checkbox" value="SSC CGL" /> SSC CGL</label>
+              <label><input type="checkbox" value="SSC CHSL" /> SSC CHSL</label>
+              <label><input type="checkbox" value="SSC MTS" /> SSC MTS</label>
+              <label><input type="checkbox" value="SSC GD" /> SSC GD</label>
+              <label><input type="checkbox" value="SSC CPO" /> SSC CPO</label>
+              <label><input type="checkbox" value="SSC Stenographer" /> SSC Stenographer</label>
+              <label><input type="checkbox" value="SSC Selection Post" /> SSC Selection Post</label>
+              <label><input type="checkbox" value="SSC JE" /> SSC JE</label>
+            </div>
+            <div class="study-task" id="targetPlanBox">Pick exam targets to see your preparation direction.</div>
+            <div class="master-actions">
+              <button type="button" onclick="saveProfileFromSettings()">Save Profile</button>
+              <button type="button" class="secondary" onclick="resetProfileForm()">Edit / Reload</button>
+            </div>
+          </section>
+
+          <section class="settings-card theme-settings-card">
+            <h3>Theme</h3>
+            <p class="muted">Change the whole software mood. Custom theme is saved too.</p>
+            <div class="theme-card settings-theme-card">
+              <label for="themeSelect">Theme</label>
+              <select id="themeSelect" aria-label="Choose app theme">
+                <option value="neon">Neon</option>
+                <option value="classic-light">Classic Light</option>
+                <option value="classic-black">Classic Black</option>
+                <option value="rpg">RPG Theme</option>
+                <option value="cozy">Cozy Theme</option>
+                <option value="custom">Custom</option>
+              </select>
+              <div class="custom-theme-panel" id="customThemePanel" hidden>
+                <span><small>BG</small><input id="customBg" type="color" value="#08111c" /></span>
+                <span><small>Panel</small><input id="customPanel" type="color" value="#13263a" /></span>
+                <span><small>Accent</small><input id="customAccent" type="color" value="#65e8ff" /></span>
+                <span><small>Power</small><input id="customPower" type="color" value="#73f58b" /></span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>
