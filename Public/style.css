@@ -138,11 +138,15 @@ button:hover { filter: brightness(1.08); }
 #examSyllabus, #examEvents { display: grid; gap: 8px; }
 .quick-prompts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
 .quick-prompts button { background: rgba(38, 59, 77, 0.95); color: white; border: 1px solid #3b5368; }
+.ai-local-note { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin: 0 0 12px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--green) 34%, var(--line)); border-radius: 8px; background: linear-gradient(135deg, color-mix(in srgb, var(--green) 12%, var(--field)), color-mix(in srgb, var(--cyan) 8%, var(--panel-2))); }
+.ai-local-note strong { color: var(--green); }
+.ai-local-note span { color: var(--muted); font-weight: 700; }
 #aiQuestion { width: 100%; min-height: 110px; resize: vertical; border: 1px solid #3b5368; border-radius: 8px; background: #07111d; color: white; padding: 14px; font: inherit; }
 .ai-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0; }
 .ai-controls select { min-height: 44px; border-radius: 8px; border: 1px solid #3b5368; background: #263b4d; color: white; padding: 0 10px; }
 .voice-select { min-width: 230px; max-width: 420px; }
 .voice-button { background: #8ecae6; }
+.external-ai-button { background: linear-gradient(135deg, color-mix(in srgb, var(--cyan) 78%, #ffffff), color-mix(in srgb, var(--green) 78%, #ffffff)); color: #04111c; }
 .stop-button { background: var(--pink); color: white; }
 #aiAnswer { min-height: 160px; white-space: pre-wrap; background: #060d16; color: #eaf4ff; border: 1px solid #31485d; border-radius: 8px; padding: 16px; overflow: auto; font-family: Arial, sans-serif; line-height: 1.5; }
 .progress-wide { margin-bottom: 18px; }

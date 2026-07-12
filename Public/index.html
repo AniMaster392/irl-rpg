@@ -20,7 +20,7 @@
       <nav class="app-nav" aria-label="App menu">
         <button class="nav-button active" data-target="dashboard">Dashboard</button>
         <button class="nav-button" data-target="study-library">Study Library</button>
-        <button class="nav-button" data-target="ai-explainer">AI Explainer</button>
+        <button class="nav-button" data-target="ai-explainer">Doubt Helper</button>
         <button class="nav-button" data-target="exam-events">News Hub</button>
         <button class="nav-button" data-target="mock-tests">Mock Tests</button>
         <button class="nav-button" data-target="progress">Quest Board</button>
@@ -71,8 +71,8 @@
             </button>
             <button class="dash-course-card card-cyan" data-open="ai-explainer">
               <span>02</span>
-              <strong>AI Explainer</strong>
-              <small>Ask doubts with voice</small>
+              <strong>Doubt Helper</strong>
+              <small>Subject detector + prompt</small>
               <b>Ask now</b>
             </button>
             <button class="dash-course-card card-dark" data-open="mock-tests">
@@ -113,7 +113,7 @@
             <aside class="dash-action-panel">
               <button data-open="study-library"><span>Book</span><strong>Best Seller</strong></button>
               <button data-open="mock-tests"><span>Test</span><strong>Practice</strong></button>
-              <button data-open="ai-explainer"><span>Star</span><strong>Favorites</strong></button>
+              <button data-open="ai-explainer"><span>Doubt</span><strong>Helper</strong></button>
               <button data-open="exam-events"><span>News</span><strong>Updates</strong></button>
               <button data-open="progress"><span>Quest</span><strong>Support</strong></button>
               <button data-open="settings"><span>User</span><strong>Profile</strong></button>
@@ -161,24 +161,29 @@
         </div>
       </section>
 
-      <section class="panel app-view" id="ai-explainer">
+            <section class="panel app-view" id="ai-explainer">
         <div class="section-head">
           <div>
-            <h2>AI Explainer</h2>
-            <p class="muted">Ask any SSC question and get a simple step-by-step explanation.</p>
+            <h2>Doubt Helper</h2>
+            <p class="muted">Detect the subject, get built-in help, or copy a perfect SSC prompt for your own AI website.</p>
           </div>
           <span class="ai-badge" id="aiMode">Ready</span>
         </div>
 
         <div class="ai-box">
           <div class="quick-prompts">
-            <button onclick="setAiQuestion('Explain percentage for SSC with one example')">Percentage</button>
-            <button onclick="setAiQuestion('Explain coding-decoding reasoning in simple words')">Reasoning</button>
-            <button onclick="setAiQuestion('Explain tenses for SSC English with examples')">English</button>
+            <button onclick="setAiQuestion('A is 150% of B. If B = 80, A = ?')">Percentage</button>
+            <button onclick="setAiQuestion('If BOOK is coded as CPPL, code TREE')">Reasoning</button>
+            <button onclick="setAiQuestion('He go to school. Find the error')">English</button>
             <button onclick="setAiQuestion('Make a 7 day SSC CGL study plan')">Study plan</button>
           </div>
 
-          <textarea id="aiQuestion" placeholder="Example: Explain ratio and proportion simply for SSC"></textarea>
+          <div class="ai-local-note">
+            <strong>Doubt Router</strong>
+            <span>First detects subject/chapter. Built-in help works here. External AI opens only when you choose it.</span>
+          </div>
+
+          <textarea id="aiQuestion" placeholder="Example: A is 150% of B. If B = 80, A = ?"></textarea>
 
           <div class="ai-controls">
             <select id="aiStyle">
@@ -186,18 +191,21 @@
               <option value="exam focused">Exam focused</option>
               <option value="step by step">Step by step</option>
             </select>
-            <button onclick="startVoiceQuestion()" class="voice-button">Speak Question</button>
+            <button onclick="startVoiceQuestion()" class="voice-button">Speak Doubt</button>
             <select id="voiceSelect" class="voice-select" title="Choose a free Chrome/Google voice"><option>Loading voices...</option></select>
-            <button onclick="askAI()">Explain</button>
-            <button onclick="readAIAnswer()" class="voice-button">Read Answer</button>
+            <button onclick="askAI()">Built-in Help</button>
+            <button onclick="prepareDoubtPrompt()" class="secondary">Make Prompt</button>
+            <button onclick="copyDoubtPrompt()" class="voice-button">Copy Prompt</button>
+            <button onclick="openExternalAI('deepseek')" class="external-ai-button">DeepSeek</button>
+            <button onclick="openExternalAI('chatgpt')" class="external-ai-button">ChatGPT</button>
+            <button onclick="openExternalAI('gemini')" class="external-ai-button">Gemini</button>
+            <button onclick="readAIAnswer()" class="voice-button">Read</button>
             <button onclick="stopVoice()" class="stop-button">Stop Voice</button>
           </div>
 
-          <pre id="aiAnswer">Ask a question to start.</pre>
+          <pre id="aiAnswer">Type a doubt, then use Built-in Help or Make Prompt.</pre>
         </div>
-      </section>
-
-      <section class="panel app-view news-hub-view" id="exam-events">
+      </section><section class="panel app-view news-hub-view" id="exam-events">
         <div class="section-head">
           <div>
             <p class="tag">Daily Intel</p>

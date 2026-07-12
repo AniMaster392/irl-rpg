@@ -874,7 +874,7 @@ function openStageExplain(subject, chapter, stageId, subjectIndex = 0) {
   chapterList.innerHTML = `
     <div class="lesson-toolbar">
       <button class="secondary" onclick="showChapterLesson('${safeSubject}', '${safeChapter}', ${subjectIndex})">Back to ${lesson.title} course</button>
-      <button onclick="openChapterInAI('${safeChapter}')">Ask Doubt in AI</button>
+      <button onclick="openChapterInAI('${safeChapter}')">Ask Doubt</button>
       <button class="voice-button" onclick="lastAiAnswer = \`${readText}\`; readAIAnswer()">Read This Step</button>
     </div>
     <article class="teach-screen">
@@ -921,7 +921,7 @@ function openStageExplain(subject, chapter, stageId, subjectIndex = 0) {
       <div class="master-actions">
         <button class="complete-stage tick-mastered" onclick="markLessonStage('${safeChapter}', '${stage.id}', '${safeSubject}', ${subjectIndex})">${done ? "Mastered" : "Tick Mastered"}</button>
         ${done ? `<button class="undo-stage" onclick="unmarkLessonStage('${safeChapter}', '${stage.id}', '${safeSubject}', ${subjectIndex}, true)">Not Learned Yet</button>` : ""}
-        <button onclick="setAiQuestion('Teach me ${safeChapter}: ${stage.title} in this order: meaning, formula or rule, example, practice question, and fast trick with keywords.'); showView('ai-explainer')">Explain With AI</button>
+        <button onclick="setAiQuestion('Teach me ${safeChapter}: ${stage.title} in this order: meaning, formula or rule, example, practice question, and fast trick with keywords.'); showView('ai-explainer')">Make AI Prompt</button>
         <button class="practice-stage" onclick="openStagePractice('${safeSubject}', '${safeChapter}', '${stage.id}', ${subjectIndex})">60s MCQ</button>
       </div>
     </article>
@@ -1328,7 +1328,7 @@ function showChapterLesson(subject, chapter, subjectIndex = 0) {
   chapterList.innerHTML = `
     <div class="lesson-toolbar">
       <button class="secondary" onclick="showLesson(${subjectIndex})">Back to ${subject} chapters</button>
-      <button onclick="openChapterInAI('${lesson.title.replace(/'/g, "\\'")}')">Ask Doubt in AI</button>
+      <button onclick="openChapterInAI('${lesson.title.replace(/'/g, "\\'")}')">Ask Doubt</button>
     </div>
     <div class="chapter-map-card">
       <span>${guide.level} - ${guide.type}</span>
@@ -1369,7 +1369,7 @@ function showChapterLesson(subject, chapter, subjectIndex = 0) {
 }
 
 function openChapterInAI(chapter) {
-  setAiQuestion(`I have a doubt in ${chapter}. Explain it simply with examples and practice questions.`);
+  setAiQuestion(`I have a doubt in ${chapter}. Detect the subject and chapter, then make a clean SSC exam prompt with examples and practice questions.`);
   showView("ai-explainer");
 }
 const currentAffairsStudyCards = [
@@ -1568,7 +1568,7 @@ function renderCurrentAffairsStudyFeed() {
     <article class="news-card compact-news-card">
       <h3>${escapeHtml(card.title)}</h3>
       <p>${escapeHtml(card.text)}</p>
-      <button onclick="setAiQuestion('Make SSC MCQ notes for ${mockEscape(card.title)} current affairs.'); showView('ai-explainer')">Ask AI Notes</button>
+      <button onclick="setAiQuestion('Make a perfect SSC MCQ prompt for ${mockEscape(card.title)} current affairs.'); showView('ai-explainer')">Make AI Notes</button>
     </article>
   `).join("");
 }
@@ -2127,7 +2127,7 @@ function renderMockResult(reason) {
       </div>
       <div class="master-actions">
         ${currentMock.mistakes.length ? `<button onclick="startMockReview()">Teach My Mistakes One by One</button>` : `<button onclick="renderMockTests()">Back to Mock Menu</button>`}
-        <button class="secondary" onclick="setAiQuestion('Explain my mock mistakes and make a revision plan for ${mockEscape(currentMock.test.title)}.'); showView('ai-explainer')">Ask AI for Plan</button>
+        <button class="secondary" onclick="setAiQuestion('Explain my mock mistakes and make a revision plan for ${mockEscape(currentMock.test.title)}.'); showView('ai-explainer')">Make AI Plan</button>
       </div>
     </article>
   `;
@@ -2504,6 +2504,169 @@ function setAiQuestion(question) {
   document.getElementById("aiQuestion").value = question;
 }
 
+function detectDoubtRoute(question) {
+  const text = String(question || "").toLowerCase();
+  const route = { subject: "SSC", chapter: "General Doubt", confidence: "Medium" };
+
+  if (/percentage|percent|%|\bof\b|profit|loss|ratio|interest|speed|distance|work|time|marks|discount|cp|sp|\d+\s*[+\-*x/]\s*\d+/.test(text)) {
+    route.subject = "Maths";
+    route.chapter = "Basic Calculation";
+    if (/percentage|percent|%|\bof\b|marks|discount|1\/3|3\/4/.test(text)) route.chapter = "Percentage";
+    if (/ratio|proportion/.test(text)) route.chapter = "Ratio and Proportion";
+    if (/profit|loss|cp|sp|discount/.test(text)) route.chapter = "Profit and Loss";
+    if (/interest|si|ci|compound/.test(text)) route.chapter = "Simple/Compound Interest";
+    if (/speed|distance|train|boat/.test(text)) route.chapter = "Speed, Time and Distance";
+    if (/work|pipe|cistern|efficiency/.test(text)) route.chapter = "Time and Work";
+    route.confidence = "High";
+  }
+
+  if (/series|coding|decoding|syllogism|blood relation|direction|analogy|odd one/.test(text)) {
+    route.subject = "Reasoning";
+    route.chapter = "Reasoning Basics";
+    if (/series/.test(text)) route.chapter = "Series";
+    if (/coding|decoding/.test(text)) route.chapter = "Coding-Decoding";
+    if (/syllogism|statement|conclusion/.test(text)) route.chapter = "Syllogism";
+    route.confidence = "High";
+  }
+
+  if (/grammar|tense|verb|noun|pronoun|adjective|adverb|sentence|error|synonym|antonym|vocabulary|comprehension/.test(text)) {
+    route.subject = "English";
+    route.chapter = "Grammar";
+    if (/tense/.test(text)) route.chapter = "Tenses";
+    if (/noun|pronoun|adjective|adverb|parts of speech/.test(text)) route.chapter = "Parts of Speech";
+    if (/error|sentence|verb/.test(text)) route.chapter = "Error Spotting / Subject-Verb Agreement";
+    route.confidence = "High";
+  }
+
+  if (/current affairs|scheme|award|appointment|minister|history|polity|geography|constitution|science|economy/.test(text)) {
+    route.subject = "General Awareness";
+    route.chapter = "Current Affairs / Static GK";
+    if (/constitution|polity/.test(text)) route.chapter = "Polity";
+    if (/history/.test(text)) route.chapter = "History";
+    if (/geography/.test(text)) route.chapter = "Geography";
+    if (/scheme|award|appointment|minister/.test(text)) route.chapter = "Current Affairs";
+    route.confidence = "High";
+  }
+
+  return route;
+}
+
+function buildExternalPrompt(question) {
+  const style = document.getElementById("aiStyle")?.value || "exam focused";
+  const route = detectDoubtRoute(question);
+  return [
+    "You are an SSC exam tutor for India.",
+    "Do not answer casually. Teach exactly for SSC exam preparation.",
+    `Detected subject: ${route.subject}`,
+    `Detected chapter: ${route.chapter}`,
+    `Explanation style: ${style}`,
+    "",
+    "Question/doubt:",
+    question,
+    "",
+    "Answer in this exact format:",
+    "1. Direct Answer",
+    "2. Subject + Chapter",
+    "3. Meaning in simple words",
+    "4. Formula / Rule",
+    "5. SSC Exam Pattern: how this appears in exams",
+    "6. Fast Method: easy method with keywords",
+    "7. Common Mistake",
+    "8. Practice: 3 MCQs from easy to exam level with answers"
+  ].join("\n");
+}
+
+function prepareDoubtPrompt() {
+  const questionBox = document.getElementById("aiQuestion");
+  const answerBox = document.getElementById("aiAnswer");
+  const aiMode = document.getElementById("aiMode");
+  const question = questionBox.value.trim();
+
+  if (!question) {
+    answerBox.textContent = "Type or speak a doubt first.";
+    return "";
+  }
+
+  const route = detectDoubtRoute(question);
+  const prompt = buildExternalPrompt(question);
+  lastAiAnswer = prompt;
+  aiMode.textContent = `${route.subject} -> ${route.chapter}`;
+  answerBox.textContent = [
+    `Detected: ${route.subject} -> ${route.chapter}`,
+    `Confidence: ${route.confidence}`,
+    "",
+    "Copy this prompt into DeepSeek, ChatGPT, or Gemini:",
+    "",
+    prompt
+  ].join("\n");
+  return prompt;
+}
+
+async function copyDoubtPrompt() {
+  const prompt = prepareDoubtPrompt();
+  if (!prompt) return;
+  const answerBox = document.getElementById("aiAnswer");
+  const aiMode = document.getElementById("aiMode");
+
+  try {
+    await navigator.clipboard.writeText(prompt);
+    aiMode.textContent = "Prompt copied";
+  } catch (error) {
+    aiMode.textContent = "Copy manually";
+  }
+
+  answerBox.textContent = `${answerBox.textContent}\n\nPrompt ready. Open your AI site and paste it.`;
+}
+
+function openExternalAI(provider) {
+  const prompt = prepareDoubtPrompt();
+  if (!prompt) return;
+
+  const links = {
+    deepseek: "https://chat.deepseek.com/",
+    chatgpt: "https://chat.openai.com/",
+    gemini: "https://gemini.google.com/app"
+  };
+
+  navigator.clipboard?.writeText(prompt).catch(() => {});
+  window.open(links[provider] || links.deepseek, "_blank", "noopener,noreferrer");
+  document.getElementById("aiMode").textContent = "Prompt copied";
+}
+function buildClientFallbackAnswer(question) {
+  const topic = question || "this SSC topic";
+  const lower = topic.toLowerCase();
+  let rule = "Use this method: meaning -> formula/rule -> example -> practice -> mistake check.";
+  let example = "If the question gives part and total, connect them before calculating.";
+  let practice = "Write the given values, choose the rule, solve one easy MCQ, then solve one exam-level MCQ.";
+
+  if (lower.includes("percentage") || lower.includes("percent") || lower.includes("%")) {
+    rule = "Percentage = Part / Whole x 100. To find a percent of a number: Percent x Number / 100.";
+    example = "40 marks out of 80 = 40 / 80 x 100 = 50%.";
+    practice = "Solve: 15% of 200, 12.5% of 480, and what percent is 45 out of 90?";
+  } else if (lower.includes("ratio")) {
+    rule = "For a:b, total parts = a + b. One part value = total / total parts.";
+    example = "Ratio 3:2 and total 50 means one part is 10, so values are 30 and 20.";
+    practice = "Solve: A:B = 5:7 and total is 72.";
+  } else if (lower.includes("tense") || lower.includes("english")) {
+    rule = "Find subject and verb, then check tense and agreement.";
+    example = "He go is wrong. He goes is correct because singular subject takes singular verb.";
+    practice = "Mark subject, verb, and tense in 5 sentences.";
+  }
+
+  return [
+    `Built-in SSC Brain: ${topic}`,
+    "",
+    "1. Meaning: First understand what the question is asking in simple words.",
+    `2. Formula / Rule: ${rule}`,
+    `3. Example: ${example}`,
+    "4. Common mistake: Do not jump to the answer. Circle keywords and given values first.",
+    `5. Practice task: ${practice}`,
+    "",
+    "Fast method: read -> circle keywords -> choose rule -> substitute -> calculate -> check options.",
+    "",
+    "This answer works inside the app. External AI is optional."
+  ].join("\n");
+}
 async function askAI() {
   const questionBox = document.getElementById("aiQuestion");
   const answerBox = document.getElementById("aiAnswer");
@@ -2516,8 +2679,9 @@ async function askAI() {
     return;
   }
 
-  aiMode.textContent = "Thinking";
-  answerBox.textContent = "Explaining...";
+  const route = detectDoubtRoute(question);
+  aiMode.textContent = `${route.subject} -> ${route.chapter}`;
+  answerBox.textContent = `Detected: ${route.subject} -> ${route.chapter}\n\nMaking built-in help...`;
 
   try {
     const res = await fetch("/api/explain", {
@@ -2535,11 +2699,14 @@ async function askAI() {
     if (!res.ok) throw new Error(data.error || "AI request failed.");
 
     lastAiAnswer = data.answer;
-    aiMode.textContent = data.mode === "gemini" ? "Gemini" : data.mode === "ai" ? "AI" : data.mode === "local" ? "Local" : "Offline";
+    const modeLabels = { gemini: "Gemini", ai: "AI", local: "Ollama", offline: "Built-in", "built-in": "Built-in" };
+    aiMode.textContent = modeLabels[data.mode] || "Built-in";
     answerBox.textContent = data.answer;
   } catch (error) {
-    aiMode.textContent = "Error";
-    answerBox.textContent = error.message;
+    const fallback = buildClientFallbackAnswer(question);
+    lastAiAnswer = fallback;
+    aiMode.textContent = "Built-in";
+    answerBox.textContent = fallback;
   }
 }
 

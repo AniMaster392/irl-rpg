@@ -2,20 +2,37 @@
 
 IRL RPG is an SSC study app that turns exam preparation into a game-style learning dashboard.
 
-It helps a learner study SSC subjects, ask AI doubts, attempt mock tests, review mistakes, follow exam news, and track quests/XP.
+It helps a learner study SSC subjects, follow a chapter path, practice mock tests, review mistakes, read exam news, and track daily quests/XP.
 
 ## Main Features
 
-- Dashboard with level, XP, timer, course cards, and progress graph
+- Dashboard with level, XP, course cards, action tiles, and progress graph
 - Study Library for Maths, Reasoning, English, and General Awareness
 - Chapter lessons from noob to master
-- AI Explainer for SSC doubts
+- Doubt Helper that detects subject/chapter and creates SSC exam-style prompts
+- Built-in SSC Brain for simple help without login or API
+- External prompt buttons for DeepSeek, ChatGPT, and Gemini
 - Voice input and browser voice reading
 - News Hub for exam updates and current affairs
 - Mock Tests with 20 questions and 10 minute timer
 - Mistake Review classroom after mocks
 - Quest Board that suggests what to study next
 - Theme settings and learner profile
+- Desktop app with the native menu bar hidden for a cleaner software feel
+
+## Doubt Helper
+
+Doubt Helper is not a forced-login AI chat. It is a study helper.
+
+It can:
+
+- Detect the likely subject and chapter from a doubt
+- Give built-in SSC help for simple doubts
+- Build a strong SSC exam-focused prompt
+- Copy that prompt for the learner
+- Open DeepSeek, ChatGPT, or Gemini when the learner chooses
+
+The learner stays in control. IRL RPG does not store external AI logins.
 
 ## Tech Stack
 
@@ -82,21 +99,11 @@ dist/IRL RPG Setup 1.0.0.exe
 
 Users can download the `.exe` from the Releases page and install IRL RPG on Windows.
 
-## AI Setup
+## Optional AI Setup
 
-Create a `.env` file in the project folder.
+IRL RPG works without API keys. Built-in SSC Brain and Doubt Helper are available by default.
 
-Use `.env.example` as the template.
-
-Example:
-
-```env
-OPENAI_API_KEY=your_key_here
-GEMINI_API_KEY=your_key_here
-OPENAI_MODEL=gpt-4.1-mini
-OPENAI_TTS_MODEL=gpt-4o-mini-tts
-OPENAI_TTS_VOICE=nova
-```
+Advanced users can still add AI keys in a local `.env` file for deeper explanations or cloud voice experiments. Use `.env.example` as a template.
 
 Important: never upload your real `.env` file to GitHub.
 
@@ -133,6 +140,6 @@ The learner can choose a target exam in Settings, and the app can shape the stud
 
 ## Current Status
 
-This is an early learning build. The app already has the main study flow, mock test flow, AI explainer, news hub, profile, themes, and quest board.
+This learning build includes the core study dashboard, Study Library, Doubt Helper, News Hub, Mock Tests, Mistake Review, Quest Board, profile, and themes.
 
-More chapters, more mock questions, and stronger live exam updates can be added over time.
+The project is ready to push to GitHub as the current working version.

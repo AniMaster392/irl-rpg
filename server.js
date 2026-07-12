@@ -50,21 +50,165 @@ function getResponseText(data) {
   return parts.join("\n").trim();
 }
 
-function buildOfflineExplanation(question) {
-  const topic = question || "this SSC topic";
-  return [
-    `Offline explainer for: ${topic}`,
-    "",
-    "1. Meaning: First understand what the topic is asking in simple words.",
-    "2. Formula or rule: Write the main formula/rule in your notebook.",
-    "3. Example: Solve one easy example slowly without timer.",
-    "4. Practice: Solve 10 basic questions, then 10 exam-level questions.",
-    "5. Revision: Mark mistakes and revise them tomorrow.",
-    "",
-    "For free AI, install Ollama and run: ollama pull llama3.2"
-  ].join("\n");
+function getBuiltInTopic(question) {
+  const text = String(question || "").toLowerCase();
+  if (/percentage|percent|%|fraction|1\/3|3\/4/.test(text)) return "percentage";
+  if (/ratio|proportion/.test(text)) return "ratio";
+  if (/profit|loss|discount|cp|sp|cost price|selling price/.test(text)) return "profit-loss";
+  if (/interest|simple interest|compound interest|\bsi\b|\bci\b/.test(text)) return "interest";
+  if (/time and work|work|pipe|cistern|efficiency/.test(text)) return "time-work";
+  if (/speed|distance|train|boat|stream/.test(text)) return "speed-distance";
+  if (/series|number series|alphabet series/.test(text)) return "series";
+  if (/coding|decoding|code language/.test(text)) return "coding";
+  if (/syllogism|statement|conclusion|only a few/.test(text)) return "syllogism";
+  if (/tense|verb|grammar|english|error spotting/.test(text)) return "english-grammar";
+  if (/parts of speech|noun|pronoun|adjective|adverb/.test(text)) return "parts-speech";
+  if (/current affairs|news|scheme|award|appointment|pib|ministry/.test(text)) return "current-affairs";
+  if (/study plan|\bplan\b|routine|schedule|timetable/.test(text)) return "study-plan";
+  return "general";
 }
 
+const builtInLessons = {
+  percentage: {
+    title: "Percentage",
+    meaning: "Percentage means per 100. It helps compare marks, discounts, profit, population, and data in one common scale.",
+    rule: "Percentage = Part / Whole x 100. To find a percent of a number: Percent x Number / 100.",
+    example: "If you score 40 marks out of 80, percentage = 40 / 80 x 100 = 50%.",
+    mistake: "Do not confuse fractions. 1/3 is 33.33%, 1/2 is 50%, 3/4 is 75%.",
+    practice: "Solve these: 15% of 200, 12.5% of 480, and what percent is 45 out of 90?"
+  },
+  ratio: {
+    title: "Ratio and Proportion",
+    meaning: "Ratio compares two quantities. Proportion says two ratios are equal.",
+    rule: "For a:b, total parts = a + b. One part value = total / total parts.",
+    example: "If boys:girls = 3:2 and total is 50, one part = 50 / 5 = 10. Boys = 30, girls = 20.",
+    mistake: "Never add actual numbers before finding one part. First convert ratio parts into real values.",
+    practice: "Solve: A:B = 5:7 and total is 72. Find A and B."
+  },
+  "profit-loss": {
+    title: "Profit and Loss",
+    meaning: "Cost price is buying price. Selling price is selling price. Profit happens when SP is more than CP.",
+    rule: "Profit = SP - CP. Loss = CP - SP. Profit% = Profit / CP x 100. Loss% = Loss / CP x 100.",
+    example: "CP = 500 and SP = 600. Profit = 100, so profit% = 100 / 500 x 100 = 20%.",
+    mistake: "Profit and loss percent are always calculated on CP unless the question says otherwise.",
+    practice: "Solve: CP = 800, SP = 720. Find loss and loss percent."
+  },
+  interest: {
+    title: "Simple and Compound Interest",
+    meaning: "Interest is extra money paid on principal. SSC asks mostly formula and comparison questions.",
+    rule: "Simple Interest = P x R x T / 100. Amount = Principal + Interest.",
+    example: "P = 1000, R = 10%, T = 2 years. SI = 1000 x 10 x 2 / 100 = 200.",
+    mistake: "Check time units. If time is in months, convert to years before using the formula.",
+    practice: "Solve: P = 2500, R = 8%, T = 3 years. Find SI."
+  },
+  "time-work": {
+    title: "Time and Work",
+    meaning: "This topic is about speed of doing work. More people or more efficiency usually means less time.",
+    rule: "If a person finishes work in n days, one day work = 1/n. Combined work = sum of one day work.",
+    example: "A does work in 10 days and B in 15 days. Together one day work = 1/10 + 1/15 = 1/6, so 6 days.",
+    mistake: "Do not add days directly. Add work per day.",
+    practice: "Solve: A in 12 days, B in 18 days. Together how many days?"
+  },
+  "speed-distance": {
+    title: "Time, Speed and Distance",
+    meaning: "Speed tells how fast distance is covered. SSC often mixes units.",
+    rule: "Speed = Distance / Time. Distance = Speed x Time. 1 m/s = 18/5 km/h.",
+    example: "Distance 120 km, speed 40 km/h, time = 120 / 40 = 3 hours.",
+    mistake: "Always convert units before solving. Do not mix minutes with hours.",
+    practice: "Solve: A train travels 180 km in 3 hours. Find speed."
+  },
+  series: {
+    title: "Reasoning Series",
+    meaning: "Series questions test pattern finding in numbers, letters, or mixed symbols.",
+    rule: "Check difference, multiplication, square/cube, alternating pattern, and alphabet position.",
+    example: "2, 4, 8, 16, ? follows x2, so answer is 32.",
+    mistake: "Do not stop at the first pattern if it fails later. Test it on every term.",
+    practice: "Solve: 3, 6, 12, 24, ? and A, C, F, J, ?"
+  },
+  coding: {
+    title: "Coding-Decoding",
+    meaning: "A word or number is written in a hidden rule. You must find the rule and apply it.",
+    rule: "Check alphabet shift, reverse order, pair swap, number position, and vowel/consonant pattern.",
+    example: "If CAT is DBU, each letter moves +1. DOG becomes EPH.",
+    mistake: "Check whether the same shift applies to all letters before answering.",
+    practice: "If BOOK is coded as CPPL, code TREE."
+  },
+  syllogism: {
+    title: "Syllogism",
+    meaning: "Syllogism checks what must be true from given statements, not what feels true in real life.",
+    rule: "Draw simple circles for all, no, some, and some not. Follow only the statement.",
+    example: "All cats are animals. Some animals are black. You cannot say some cats are black unless forced.",
+    mistake: "Do not use outside knowledge. Use only the given statement.",
+    practice: "Practice 10 questions by drawing circles slowly."
+  },
+  "english-grammar": {
+    title: "SSC English Grammar",
+    meaning: "Grammar questions test rule use in sentences: tense, subject-verb agreement, preposition, article, and error spotting.",
+    rule: "Read the full sentence, find subject and verb, then check tense and grammar connection.",
+    example: "He go to school is wrong. He goes to school is correct because singular subject takes singular verb.",
+    mistake: "Do not judge by sound only. Find the grammar rule.",
+    practice: "Write 5 sentences and mark subject, verb, tense, and error."
+  },
+  "parts-speech": {
+    title: "Parts of Speech",
+    meaning: "Parts of speech tell the job of each word in a sentence.",
+    rule: "Noun names. Pronoun replaces noun. Verb shows action/state. Adjective describes noun. Adverb describes verb/adjective/adverb.",
+    example: "The smart student quickly solved it. smart = adjective, student = noun, quickly = adverb, solved = verb.",
+    mistake: "A word can change role depending on the sentence. Always check the job in that sentence.",
+    practice: "Pick 10 sentences and mark noun, verb, adjective, and adverb."
+  },
+  "current-affairs": {
+    title: "Current Affairs for SSC",
+    meaning: "Current affairs is not just news. For SSC, turn news into exam facts.",
+    rule: "For every news item write: who, what, where, when, why, and static GK link.",
+    example: "If a government scheme is in news, note scheme name, ministry, aim, beneficiaries, and launch year.",
+    mistake: "Do not read long news like entertainment. Extract MCQ facts.",
+    practice: "Open News Hub and convert 3 items into one-line MCQ notes."
+  },
+  "study-plan": {
+    title: "SSC Study Plan",
+    meaning: "A plan converts big syllabus into daily quests so you do not feel lost.",
+    rule: "Daily mix: 45 min Maths, 30 min Reasoning, 30 min English, 20 min GK, plus mistake revision.",
+    example: "Day 1: Percentage basics + 30 MCQ, Series basics + 20 MCQ, Parts of Speech + 20 MCQ, 20 current affairs facts.",
+    mistake: "Do not only watch videos. Solve questions and revise mistakes every day.",
+    practice: "Today finish one lesson step, one 60s MCQ, and one mock mistake review."
+  },
+  general: {
+    title: "SSC Doubt Solver",
+    meaning: "First identify the chapter, what is given, and what the question asks.",
+    rule: "Use this method: meaning -> formula/rule -> substitute values -> solve -> check units/options.",
+    example: "If a question gives marks out of total, it is usually percentage. Use part / whole x 100.",
+    mistake: "Do not jump to the answer. Underline given values and the keyword first.",
+    practice: "Rewrite your doubt as: given, asked, formula, answer. Then solve one similar MCQ."
+  }
+};
+
+function buildOfflineExplanation(question, style = "simple") {
+  const lesson = builtInLessons[getBuiltInTopic(question)] || builtInLessons.general;
+  const title = question || lesson.title;
+  const styleLine = style === "exam focused"
+    ? "Exam focus: look for keywords, eliminate wrong options, and write one notebook rule."
+    : style === "step by step"
+      ? "Step-by-step mode: move slowly from meaning to formula to example to practice."
+      : "Simple mode: understand the idea first, then solve one easy example.";
+
+  return [
+    `Built-in SSC Brain: ${title}`,
+    "",
+    `Topic: ${lesson.title}`,
+    styleLine,
+    "",
+    `1. Meaning: ${lesson.meaning}`,
+    `2. Formula / Rule: ${lesson.rule}`,
+    `3. Example: ${lesson.example}`,
+    `4. Common mistake: ${lesson.mistake}`,
+    `5. Practice task: ${lesson.practice}`,
+    "",
+    "Fast method: read the question -> circle keywords -> choose rule -> substitute values -> calculate -> check options.",
+    "",
+    "This answer works inside the app. Ollama, Gemini, or OpenAI are optional upgrades for deeper open-ended answers."
+  ].join("\n");
+}
 function buildTutorPrompt(question, style) {
   return [
     "You are an SSC exam tutor for India.",
@@ -336,13 +480,17 @@ app.post("/api/explain", async (req, res) => {
     const answer = await explainWithOllama(question, style);
     return res.json({ answer, mode: "local" });
   } catch (error) {
-    try {
-      const answer = await explainWithOllama(question, style);
-      return res.json({ answer, mode: "local" });
-    } catch (_) {
-      const fallback = buildOfflineExplanation(question);
-      return res.json({ answer: `${error.message}\n\n${fallback}`, mode: "offline" });
+    if (provider !== "ollama") {
+      try {
+        const answer = await explainWithOllama(question, style);
+        return res.json({ answer, mode: "local" });
+      } catch (_) {
+        // Built-in SSC Brain below keeps the app useful without external AI.
+      }
     }
+
+    const fallback = buildOfflineExplanation(question, style);
+    return res.json({ answer: fallback, mode: "built-in", providerError: error.message });
   }
 });
 
