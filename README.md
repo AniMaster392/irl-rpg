@@ -138,8 +138,6 @@ IRL RPG is built for SSC preparation. It focuses on:
 
 The learner can choose a target exam in Settings, and the app can shape the study path around that target.
 
-## Current Status
 
 This learning build includes the core study dashboard, Study Library, Doubt Helper, News Hub, Mock Tests, Mistake Review, Quest Board, profile, and themes.
 
-The project is ready to push to GitHub as the current working version.
